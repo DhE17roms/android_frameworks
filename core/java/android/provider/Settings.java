@@ -2304,6 +2304,63 @@ public final class Settings {
          */
         public static final String POINTER_SPEED = "pointer_speed";
 		
+		/**
+		 * Style of Battery
+		 * 0 - Icon Only
+		 * 1 - Text Only
+		 * 2 - Icon with Text
+		 * 3 - Icon with Text Centered
+		 * 4 - Icon Circle MOD
+		 * 5 - Icon HONEYCOMB
+		 * 6 - Icon Smooth Circle
+		 * 7 - Hide
+		 */
+		public static final String STATUSBAR_BATTERY_ICON = "statusbar_battery_icon";
+		
+		/**
+         * Whether the volume keys wake the screen.
+         * @hide
+         */
+        public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
+		
+        /**
+         * Whether volume up/down can be long pressed to skip tracks
+         * @hide
+         */
+        public static final String VOLUME_MUSIC_CONTROLS = "volume_music_controls";
+		
+		/**
+         * Whether to show the battery bar
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_BAR = "statusbar_battery_bar";
+		
+        /**
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_BAR_COLOR = "statusbar_battery_bar_color";
+		
+        /**
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_BAR_THICKNESS = "statusbar_battery_bar_thickness";
+		
+        /**
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_BAR_STYLE = "statusbar_battery_bar_style";
+		
+        /**
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_BAR_ANIMATE = "statusbar_battery_bar_animate";
+		
+        /**
+         * use Alt Activity Resolver Grid (GB style)
+         * boolean
+         *
+         * @hide
+         */
 		public static final String ACTIVITY_RESOLVER_USE_ALT = "activity_resolver_use_alt";
 
         /**
@@ -2351,6 +2408,17 @@ public final class Settings {
 		 * @hide
 		 */
 		public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
+		
+		/**
+         * Clock Actions 0 = single, 1 = long, 2 = double click
+         *
+         * @hide
+         */
+        public static final String[] NOTIFICATION_CLOCK = new String[] {
+		"notification_clock_0",
+		"notification_clock_1",
+		"notification_clock_2",
+        };		
 		
 		/**
          * Settings to backup. This is here so that it's in the same place as the settings
