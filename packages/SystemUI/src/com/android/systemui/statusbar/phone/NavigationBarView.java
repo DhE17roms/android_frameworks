@@ -21,10 +21,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.LayoutTransition;
 import android.app.StatusBarManager;
 import android.content.Context;
+import android.content.ContentResolver;
+import android.database.ContentObserver;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.provider.Settings;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ServiceManager;
@@ -68,10 +71,19 @@ public class NavigationBarView extends LinearLayout {
     int mBarSize;
     boolean mVertical;
     boolean mScreenOn;
-
-    boolean mHidden, mLowProfile, mShowMenu;
+	
+    boolean mHidden, mLowProfile, mShowMenu, mNavStyles;
     int mDisabledFlags = 0;
     int mNavigationIconHints = 0;
+	
+	public final static int STOCK_STYLE = 0;
+	public final static int HONEYCOMB_STYLE = 1;
+	public final static int ZENYTH_STYLE = 2;
+	public final static int AIRBRUSH_STYLE = 3;
+	public final static int BALLOON_STYLE = 4;
+	public final static int METRO_STYLE = 5;
+	public final static int PLAYSTATION_STYLE = 6;
+	public final static int TEXT_STYLE = 7;
 
     private Drawable mBackIcon, mBackLandIcon, mBackAltIcon, mBackAltLandIcon;
     
@@ -167,9 +179,10 @@ public class NavigationBarView extends LinearLayout {
         mBarSize = res.getDimensionPixelSize(R.dimen.navigation_bar_size);
         mVertical = false;
         mShowMenu = false;
+		mNavStyles = false;
         mDelegateHelper = new DelegateViewHelper(this);
 
-        mBackIcon = res.getDrawable(R.drawable.ic_sysbar_back);
+		mBackIcon = res.getDrawable(R.drawable.ic_sysbar_back);
         mBackLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_land);
         mBackAltIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
         mBackAltLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
@@ -213,20 +226,165 @@ public class NavigationBarView extends LinearLayout {
 
         mNavigationIconHints = hints;
 
-        getBackButton().setAlpha(
-            (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_NOP)) ? 0.5f : 1.0f);
+		// We can't gaurantee users will set these buttons as targets
+		if (getBackButton() != null) {
+			getBackButton().setAlpha(
+			(0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_NOP)) ? 0.5f : 1.0f);
+			// Disable this for the moment
+			/* ((ImageView)getBackButton()).setImageDrawable(
+				 (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT))
+				 ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
+				 : (mVertical ? mBackLandIcon : mBackIcon)); */
+		}
+
         getHomeButton().setAlpha(
             (0 != (hints & StatusBarManager.NAVIGATION_HINT_HOME_NOP)) ? 0.5f : 1.0f);
         getRecentsButton().setAlpha(
             (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_NOP)) ? 0.5f : 1.0f);
-
-        ((ImageView)getBackButton()).setImageDrawable(
-            (0 != (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT))
-                ? (mVertical ? mBackAltLandIcon : mBackAltIcon)
-                : (mVertical ? mBackLandIcon : mBackIcon));
-
-        setDisabledFlags(mDisabledFlags, true);
     }
+
+	public void setIconStyle(final boolean style) {
+		setIconStyle(style, false);
+	}	
+
+	public void setIconStyle(final boolean style, final boolean force) {
+		if (!force && mNavStyles == style) return;
+			mNavStyles = style;
+			boolean localStyle = style;
+
+		int currentStyle = Settings.System.getInt(mContext.getContentResolver(),
+								Settings.System.NAVBAR_STYLE_ICON, STOCK_STYLE);
+
+	switch (currentStyle) {
+		default:
+			case STOCK_STYLE:
+				((ImageView) getMenuButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_menu_land
+				: R.drawable.ic_sysbar_menu);
+				((ImageView) getBackButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_back_land
+				: R.drawable.ic_sysbar_back);
+				((ImageView) getRecentsButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_recent_land
+				: R.drawable.ic_sysbar_recent);
+				((ImageView) getHomeButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_home_land
+				: R.drawable.ic_sysbar_home);
+			break;
+
+			case HONEYCOMB_STYLE:
+				((ImageView) getMenuButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_menu_land_hc
+				: R.drawable.ic_sysbar_menu_hc);
+				((ImageView) getBackButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_back_land_hc
+				: R.drawable.ic_sysbar_back_hc);
+				((ImageView) getRecentsButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_recent_land_hc
+				: R.drawable.ic_sysbar_recent_hc);
+				((ImageView) getHomeButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_home_land_hc
+				: R.drawable.ic_sysbar_home_hc);
+				localStyle = true;
+			break;
+
+			case ZENYTH_STYLE:
+				((ImageView) getMenuButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_menu_land_zen
+				: R.drawable.ic_sysbar_menu_zen);
+				((ImageView) getBackButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_back_land_zen
+				: R.drawable.ic_sysbar_back_zen);
+				((ImageView) getRecentsButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_recent_land_zen
+				: R.drawable.ic_sysbar_recent_zen);
+				((ImageView) getHomeButton())
+				.setImageResource(mVertical ? R.drawable.ic_sysbar_home_land_zen
+				: R.drawable.ic_sysbar_home_zen);
+				localStyle = true;
+			break;
+
+		case AIRBRUSH_STYLE:
+			((ImageView) getMenuButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_menu_land_air
+			: R.drawable.ic_sysbar_menu_air);
+			((ImageView) getBackButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_back_land_air
+			: R.drawable.ic_sysbar_back_air);
+			((ImageView) getRecentsButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_recent_land_air
+			: R.drawable.ic_sysbar_recent_air);
+			((ImageView) getHomeButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_home_land_air
+			: R.drawable.ic_sysbar_home_air);
+			localStyle = true;
+		break;
+
+		case BALLOON_STYLE:
+			((ImageView) getMenuButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_menu_land_ball
+			: R.drawable.ic_sysbar_menu_ball);
+			((ImageView) getBackButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_back_land_ball
+			: R.drawable.ic_sysbar_back_ball);
+			((ImageView) getRecentsButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_recent_land_ball
+			: R.drawable.ic_sysbar_recent_ball);
+			((ImageView) getHomeButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_home_land_ball
+			: R.drawable.ic_sysbar_home_ball);
+			localStyle = true;
+		break;
+
+		case METRO_STYLE:
+			((ImageView) getMenuButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_menu_land_metro
+			: R.drawable.ic_sysbar_menu_metro);
+			((ImageView) getBackButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_back_land_metro
+			: R.drawable.ic_sysbar_back_metro);
+			((ImageView) getRecentsButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_recent_land_metro
+			: R.drawable.ic_sysbar_recent_metro);
+			((ImageView) getHomeButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_home_land_metro
+			: R.drawable.ic_sysbar_home_metro);
+			localStyle = true;
+		break;
+
+		case PLAYSTATION_STYLE:
+			((ImageView) getMenuButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_menu_land
+			: R.drawable.ic_sysbar_menu);
+			((ImageView) getBackButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_back_land_play
+			: R.drawable.ic_sysbar_back_play);
+			((ImageView) getRecentsButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_recent_land_play
+			: R.drawable.ic_sysbar_recent_play);
+			((ImageView) getHomeButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_home_land_play
+			: R.drawable.ic_sysbar_home_play);
+			localStyle = true;
+		break;
+
+		case TEXT_STYLE:
+			((ImageView) getMenuButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_menu_land_text
+			: R.drawable.ic_sysbar_menu_text);
+			((ImageView) getBackButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_back_land_text
+			: R.drawable.ic_sysbar_back_text);
+			((ImageView) getRecentsButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_recent_land_text
+			: R.drawable.ic_sysbar_recent_text);
+			((ImageView) getHomeButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_home_land_text
+			: R.drawable.ic_sysbar_home_text);
+			localStyle = true;
+		break;
+		}
+	}
 
     public void setDisabledFlags(int disabledFlags) {
         setDisabledFlags(disabledFlags, false);
@@ -379,6 +537,7 @@ public class NavigationBarView extends LinearLayout {
         setLowProfile(mLowProfile, false, true /* force */);
         setDisabledFlags(mDisabledFlags, true /* force */);
         setMenuVisibility(mShowMenu, true /* force */);
+		setIconStyle(mNavStyles, true /* force */);
 
         if (DEBUG) {
             Slog.d(TAG, "reorient(): rot=" + mDisplay.getRotation());
@@ -510,5 +669,4 @@ public class NavigationBarView extends LinearLayout {
                 );
         pw.println("    }");
     }
-
 }

@@ -2409,7 +2409,7 @@ public final class Settings {
 		public static final String STATUSBAR_NOTIF_COUNT = "status_bar_notif_count";
 		
 		/**
-		 * Holde text for carrier label. An empty string 
+		 * Hold text for carrier label. An empty string 
 		 * will bring the default back.
 		 * @hide
 		 */
@@ -2424,7 +2424,43 @@ public final class Settings {
 		"notification_clock_0",
 		"notification_clock_1",
 		"notification_clock_2",
-        };		
+        };
+		
+		/**
+		 * Change the icon style to one of the programmed options 
+		 * @hide
+		 */
+		public static final String NAVBAR_STYLE_ICON = "navbar_style_icon";
+		
+		/**
+		 * @hide
+		 */
+		public static final String NAVIGATION_BAR_TINT = "navbar_icon_color";
+		
+		/**
+		 * @hide
+		 */
+		public static final String NAVIGATION_BAR_GLOW_TINT = "navigation_bar_glow_tint";
+		
+		public static final String NAVIGATION_BAR_BUTTON_ALPHA = "navigation_bar_button_alpha";
+		
+		/**
+		 * [0] = how long to animate glow off
+		 * [1] = how long to animate glow on
+		 *
+		 * @hide
+		 */
+		public static final String[] NAVIGATION_BAR_GLOW_DURATION = new String[] {
+				"navigation_bar_glow_duration_off",
+				"navigation_bar_glow_duration_on"
+		};
+		
+		/**
+		 * Change height of the navigation bar
+		 *
+		 * @hide
+		 */
+		public static final String NAV_BUTTONS_HEIGHT = "nav_buttons_height";
 		
 		/**
          * Settings to backup. This is here so that it's in the same place as the settings
