@@ -2311,6 +2311,14 @@ public final class Settings {
         public static final String POINTER_SPEED = "pointer_speed";
 		
 		/**
+         * @hide
+         * Vibrate when expanding notifications
+         * 0 - no vibrate
+         * 1 - vibrate
+         */
+        public static final String VIBRATE_NOTIF_EXPAND = "vibrate_notif_expand";
+		
+		/**
 		 * Style of Battery
 		 * 0 - Icon Only
 		 * 1 - Text Only
@@ -2461,6 +2469,16 @@ public final class Settings {
 		 * @hide
 		 */
 		public static final String NAV_BUTTONS_HEIGHT = "nav_buttons_height";
+		
+		public static final String QUICK_TOGGLES = "quick_toggles";
+		
+		public static final String QUICK_TOGGLES_PER_ROW = "quick_toggles_per_row";
+		
+		/**
+		 * Key to store Torch state.
+		 * @hide 
+		 */
+        public static final String TORCH_STATE = "torch_state";
 		
 		/**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -2759,6 +2777,20 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+		
+		/**
+         * Setting to enable volume options.
+         *
+         * @hide
+         */
+        public static final String ENABLE_VOLUME_OPTIONS = "enable_volume_options";
+		
+        /**
+         * Setting to Link Ringtone and Notification.
+         *
+         * @hide
+         */
+        public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
     }
 
     /**
